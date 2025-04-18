@@ -19,8 +19,7 @@ class JailbreakAttackRecord:
         self.target_model = target_model
         self.model_response = model_response
         self.timestamp = timestamp
-        # self.grade = self._validate_grade(grade)
-        self.grade = grade
+        self.grade = self._validate_grade(grade)
 
     @staticmethod
     def _validate_grade(grade: float) -> float:

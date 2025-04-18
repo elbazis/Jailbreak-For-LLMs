@@ -1,10 +1,9 @@
 import csv
 from datetime import datetime
-# from llama3 import run_llama3
-from attack_grade import compute_attack_grade
 from attack_record import JailbreakAttackRecord
-from phi4 import run_phi4
 import os
+import aiohttp
+import html
 
 def _save_records_to_csv(records: list, csv_file_path: str) -> None:
     """
@@ -35,33 +34,32 @@ def _save_records_to_csv(records: list, csv_file_path: str) -> None:
             ])
 
 
-def work_with_llama3():
-    list_of_records = run_llama3()
-    list_of_records_instances = []
-    for record in list_of_records:
-        name = record[0]
-        prompt = record[1]
-        response = record[2]
-        timestamp = record[3]
-        grade = compute_attack_grade(prompt, response)
-        new_attack_record = JailbreakAttackRecord(name, prompt, "LLAMA3", response, timestamp, grade)
-        list_of_records_instances.append(new_attack_record)
+async def ask_lmstudio(prompt):
+    async with aiohttp.ClientSession() as session:
+        payload = {
+            "model": "gemma-3-4b-it",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.7,
+            "stream": False
+        }
+        headers = {
+            "Content-Type": "application/json; charset=utf-8"
+        }
+        async with session.post("http://localhost:1234/v1/chat/completions", json=payload, headers=headers, timeout=1800) as resp:
+            res = await resp.json()
+            raw_text = res["choices"][0]["message"]["content"]
 
-    _save_records_to_csv(list_of_records_instances, "../data_layer/jailbreak_attacks_log/attacks_log.csv")
+            # Clean up encoding issues and decode HTML entities
+            cleaned_text = (
+                raw_text
+                .encode('latin1', errors='ignore')  # Fix common mojibake
+                .decode('utf-8', errors='ignore')   # Decode properly
+            )
+            cleaned_text = html.unescape(cleaned_text)  # Fix things like &amp; -> &
 
+            print(cleaned_text)
+            return cleaned_text
 
-def work_with_phi4():
-    list_of_records = run_phi4()
-    list_of_records_instances = []
-    for record in list_of_records:
-        name = record[0]
-        prompt = record[1]
-        response = record[2]
-        timestamp = record[3]
-        grade = compute_attack_grade(prompt, response)
-        new_attack_record = JailbreakAttackRecord(name, prompt, "phi4", response, timestamp, grade)
-        list_of_records_instances.append(new_attack_record)
-
-    _save_records_to_csv(list_of_records_instances, "../data_layer/jailbreak_attacks_log/attacks_log.csv")
-
-work_with_phi4()
+async def run_all(prompts):
+    tasks = [ask_lmstudio(p) for p in prompts]
+    return await asyncio.gather(*tasks)
