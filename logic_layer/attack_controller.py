@@ -1,3 +1,4 @@
+import asyncio
 import csv
 from datetime import datetime
 from attack_record import JailbreakAttackRecord
@@ -34,10 +35,10 @@ def _save_records_to_csv(records: list, csv_file_path: str) -> None:
             ])
 
 
-async def ask_lmstudio(prompt):
+async def ask_lmstudio(prompt, model):
     async with aiohttp.ClientSession() as session:
         payload = {
-            "model": "gemma-3-4b-it",
+            "model": model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.7,
             "stream": False
@@ -45,7 +46,7 @@ async def ask_lmstudio(prompt):
         headers = {
             "Content-Type": "application/json; charset=utf-8"
         }
-        async with session.post("http://localhost:1234/v1/chat/completions", json=payload, headers=headers, timeout=1800) as resp:
+        async with session.post("http://localhost:1234/v1/chat/completions", json=payload, headers=headers, timeout=10800) as resp:
             res = await resp.json()
             raw_text = res["choices"][0]["message"]["content"]
 
@@ -56,10 +57,8 @@ async def ask_lmstudio(prompt):
                 .decode('utf-8', errors='ignore')   # Decode properly
             )
             cleaned_text = html.unescape(cleaned_text)  # Fix things like &amp; -> &
-
-            print(cleaned_text)
             return cleaned_text
 
-async def run_all(prompts):
-    tasks = [ask_lmstudio(p) for p in prompts]
+async def run_all(prompts, model):
+    tasks = [ask_lmstudio(p, model) for p in prompts]
     return await asyncio.gather(*tasks)
