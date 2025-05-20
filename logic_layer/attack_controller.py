@@ -1,7 +1,5 @@
 import asyncio
 import csv
-from datetime import datetime
-from attack_record import JailbreakAttackRecord
 import os
 import aiohttp
 import html
@@ -13,7 +11,6 @@ def _save_records_to_csv(records: list, csv_file_path: str) -> None:
     :param records: List of JailbreakAttackRecord instances.
     :param csv_file_path: Path to the CSV file where the records will be saved.
     """
-    # Define the header based on the attributes of JailbreakAttackRecord
     header = ["Attack Name", "Prompt", "Target Model", "Response", "Timestamp", "Grade"]
     file_exists = os.path.isfile(csv_file_path)
 
@@ -22,7 +19,6 @@ def _save_records_to_csv(records: list, csv_file_path: str) -> None:
         if not file_exists:
             writer.writerow(header)
 
-        # Iterate through each record and write it to the CSV
         for jailbreak_record in records:
             writer.writerow([
                 jailbreak_record.attack_name,
@@ -53,10 +49,10 @@ async def ask_lmstudio(prompt, model):
             # Clean up encoding issues and decode HTML entities
             cleaned_text = (
                 raw_text
-                .encode('latin1', errors='ignore')  # Fix common mojibake
-                .decode('utf-8', errors='ignore')   # Decode properly
+                .encode('latin1', errors='ignore')
+                .decode('utf-8', errors='ignore')
             )
-            cleaned_text = html.unescape(cleaned_text)  # Fix things like &amp; -> &
+            cleaned_text = html.unescape(cleaned_text)
             return cleaned_text
 
 async def run_all(prompts, model):

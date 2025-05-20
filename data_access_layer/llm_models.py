@@ -22,3 +22,4 @@ def get_all_llm_models():
         finally:
             cursor.close()
             connection.close()
+    return None

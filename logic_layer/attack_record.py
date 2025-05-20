@@ -12,7 +12,7 @@ class JailbreakAttackRecord:
         :param target_model: The target model of the attack.
         :param model_response: The target model's response to prompt
         :param timestamp: The time when the attack was created or recorded.
-        :param grade: The grade of the attack, must be a float between 0 and 1 (inclusive).
+        :param grade: The grade of the attack must be a float between 0 and 1 (inclusive).
         """
         self.attack_name = attack_name
         self.prompt = attack_prompt

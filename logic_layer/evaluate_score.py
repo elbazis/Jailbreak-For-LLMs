@@ -107,10 +107,11 @@ class JailbreakScorer:
 
         return score
 
-# ---------- DEMO ---------- #
 if __name__ == "__main__":
     scorer = JailbreakScorer()
-    files = ["phi-4-mini-instruct"]
+    files = ["phi-4-mini-instruct", "phi-3-mini-4k-instruct",
+             "llama-2-7b-chat@q2_k", "llama-2-7b-chat@q4_k_s",
+             "wizardlm-2-7b", "gemma-3-4b-it", "deepseek-r1-distill-qwen-7b"]
     for file in files:
         df = pd.read_csv(f'data_layer/jailbreak_attacks_log/{file}_attacks_log_new.csv')
         test_cases = []
@@ -125,7 +126,6 @@ if __name__ == "__main__":
         results = []
         for case in test_cases:
             score = scorer(case["q"], case["a"])
-            # print(f"{case['q']:35s}: {score}")
             results.append({
                 "prompt": case["q"],
                 "answer": case["a"],

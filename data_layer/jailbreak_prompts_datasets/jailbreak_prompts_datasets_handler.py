@@ -15,20 +15,17 @@ def format_csv_to_two_columns(existing_csv_path: str, new_csv_path: str) -> None
         reader = csv.reader(infile)
         writer = csv.writer(outfile)
 
-        # Get the header row and strip BOM from the first column
         header = next(reader)
         header[0] = header[0].lstrip('\ufeff').strip()  # Remove BOM and any extra spaces
-        # print(header[0])
-        # Find indices of 'Name' and 'Prompt' columns (case-insensitive)
-        # name_index = header[0].index("Name")
+        print(header[0])
+
+        name_index = header[0].index("Name")
         prompt_index = header.index("Prompt")
 
-        # Write the new header with only 'Name' and 'Prompt'
         writer.writerow(["Name", "Prompt"])
 
-        # Write rows with only 'Name' and 'Prompt' columns
         for row in reader:
-            # writer.writerow([row[name_index], row[prompt_index]])
+            writer.writerow([row[name_index], row[prompt_index]])
             writer.writerow([row[0], row[prompt_index]])
 
 
@@ -44,10 +41,8 @@ def create_list_of_pairs_names_and_prompts_from_csv(csv_file_path: str) -> list:
     with open(csv_file_path, mode='r', newline='', encoding='utf-8-sig') as infile:
         reader = csv.reader(infile)
 
-        # Skip the header row
         next(reader, None)  # Skip the first row (header)
 
-        # Iterate over each remaining row in the CSV
         for row in reader:
             if len(row) > 1:  # Ensure the second column exists
                 name = row[0]
@@ -56,8 +51,3 @@ def create_list_of_pairs_names_and_prompts_from_csv(csv_file_path: str) -> list:
                 pairs.append((name, formatted_prompt))
         return pairs
 
-
-# if __name__ == '__main__':
-#     format_csv_to_two_columns('dataset.csv',
-#                               'first_dataset.csv')
-#     prompts = create_list_of_prompts_from_csv('jailbreak_prompts_datasets/first_dataset.csv')
