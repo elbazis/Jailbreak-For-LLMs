@@ -10,14 +10,12 @@ def _translate_prompts(lang):
     names_and_translated_prompts = []
     translator = Translator()
     for name, prompt in names_and_prompts:
-        # print(prompt)
-        # print("****")
         try:
-            result = translator.translate(prompt, dest='eu')
+            result = translator.translate(prompt, dest=lang)
             translated_prompt = result.text
         except Exception as e:
             print(prompt)
-            print(f"❌ Error translating")
+            print(f"Error translating")
             translated_prompt = ""
         finally:
             names_and_translated_prompts.append((name, translated_prompt))
@@ -39,6 +37,6 @@ def save_translated_prompts(lang):
                 translated_prompt_record[1]
             ])
 
-# save_translated_prompts('eu') #באסקית
-# save_translated_prompts('cy') #וולשית
+save_translated_prompts('eu') #באסקית
+save_translated_prompts('cy') #וולשית
 save_translated_prompts('et')  # אסטונית
