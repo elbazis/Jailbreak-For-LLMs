@@ -67,7 +67,7 @@ async def ask_lmstudio_with_image(image_path, model, text_prompt="Inside This Im
             "http://localhost:1234/v1/chat/completions",
             json=payload,
             headers=headers,
-            timeout=10800
+            timeout=400
         ) as resp:
             res = await resp.json()
             raw_text = res["choices"][0]["message"]["content"]
@@ -107,5 +107,5 @@ async def ask_lmstudio(prompt, model):
             return cleaned_text
 
 async def run_all(prompts: list[str], model: str):
-    tasks = [ask_lmstudio(p, model) for p in prompts[:1]]
+    tasks = [ask_lmstudio(p, model) for p in prompts]
     return await asyncio.gather(*tasks)

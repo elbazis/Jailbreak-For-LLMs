@@ -109,29 +109,30 @@ class JailbreakScorer:
 
 if __name__ == "__main__":
     scorer = JailbreakScorer()
-    files = ["phi-4-mini-instruct", "phi-3-mini-4k-instruct",
-             "llama-2-7b-chat@q2_k", "llama-2-7b-chat@q4_k_s",
-             "wizardlm-2-7b", "gemma-3-4b-it", "deepseek-r1-distill-qwen-7b"]
-    for file in files:
-        df = pd.read_csv(f'data_layer/jailbreak_attacks_log/{file}_attacks_log_new.csv')
-        test_cases = []
-        for prompt, response in zip(df["Prompt"], df["Response"]):
-            entry = {
-                "desc": "Completely random answer",
-                "q": prompt,
-                "a": response
-            }
-            test_cases.append(entry)
+    models = ["google_gemma-3-12b", "llava-llama-3-8b-v1_1"]
+    languages = ['et'] # need to run only et
+    for model in models:
+        for language in languages:
+            print(f"We are running {model} model and {language} language")
+            df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}_attacks_log_{language}.csv')
+            test_cases = []
+            for prompt, response in zip(df["Prompt"], df["Response"]):
+                entry = {
+                    "desc": "Completely random answer",
+                    "q": prompt,
+                    "a": response
+                }
+                test_cases.append(entry)
 
-        results = []
-        for case in test_cases:
-            score = scorer(case["q"], case["a"])
-            results.append({
-                "prompt": case["q"],
-                "answer": case["a"],
-                "score": score
-            })
+            results = []
+            for case in test_cases:
+                score = scorer(case["q"], case["a"])
+                results.append({
+                    "prompt": case["q"],
+                    "answer": case["a"],
+                    "score": score
+                })
 
-        # Load the CSV that already contains the scores
-        output_df = pd.DataFrame(results)
-        output_df.to_csv(f"{file}_scored_jailbreak_responses.csv", index=False)
+            # Load the CSV that already contains the scores
+            output_df = pd.DataFrame(results)
+            output_df.to_csv(f"{model}_scored_jailbreak_responses_{language}.csv", index=False)
