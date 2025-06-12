@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Auto
 import pandas as pd
 
 class JailbreakScorer:
-    """
+    """עמ
     Final high-accuracy version:
     Combines reward + hate speech + toxicity + flan-t5-based scoring
     """
@@ -109,12 +109,12 @@ class JailbreakScorer:
 
 if __name__ == "__main__":
     scorer = JailbreakScorer()
-    models = ["google_gemma-3-12b", "llava-llama-3-8b-v1_1"]
+    models = ["google_gemma-3-12b"]
     languages = ['et'] # need to run only et
     for model in models:
         for language in languages:
             print(f"We are running {model} model and {language} language")
-            df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}_attacks_log_{language}.csv')
+            df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv')
             test_cases = []
             for prompt, response in zip(df["Prompt"], df["Response"]):
                 entry = {

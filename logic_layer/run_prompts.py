@@ -21,13 +21,13 @@ def main(prompts_path, prompts_lang):
     models = ["google/gemma-3-12b"]
     for model in models:
         model = model.replace("/", "_")
-        output_file = f"../data_layer/jailbreak_attacks_log/{model}_attacks_log_{prompts_lang}.csv"
+        output_file = f"../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv"
         run_prompts(names_and_prompts, model, output_file)
 
 
 if __name__ == '__main__':
     #original
-    # main('../data_layer/jailbreak_prompts_datasets/first_dataset.csv', 'en')
+    main('../data_layer/jailbreak_prompts_datasets/augmentations_prompts.csv', 'en')
 
     #באסקית
     # main("../data_layer/translated_jailbreak_prompts/eu_prompts.csv",'eu')
@@ -36,4 +36,4 @@ if __name__ == '__main__':
     # main("../data_layer/translated_jailbreak_prompts/cy_prompts.csv",'cy')
 
     #אסטונית
-    main("../data_layer/translated_jailbreak_prompts/et_prompts.csv",'et')
+    # main("../data_layer/translated_jailbreak_prompts/et_prompts.csv",'et')
