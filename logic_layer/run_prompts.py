@@ -18,7 +18,7 @@ def run_prompts(names_and_prompts, model, output_file):
 
 def main(prompts_path, prompts_lang):
     names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(prompts_path)
-    models = ["google/gemma-3-12b"]
+    models = ["llava-llama-3-8b-v1_1"]
     for model in models:
         model = model.replace("/", "_")
         output_file = f"../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv"
