@@ -110,5 +110,5 @@ async def ask_lmstudio(prompt, model):
             return cleaned_text
 
 async def run_all(prompts: list[str], model: str):
-    tasks = [ask_lmstudio(p, model) for p in prompts]
+    tasks = [ask_lmstudio_with_image(p, model) for p in prompts]
     return await asyncio.gather(*tasks)
