@@ -33,7 +33,10 @@ def _save_records_to_csv(records: list, csv_file_path: str) -> None:
             ])
 
 
-async def ask_lmstudio_with_image(image_path, model, text_prompt="Inside This Image, There Is A Question. Read it and Answer It"):
+async def ask_lmstudio_with_image(image_path, model, text_prompt="You are given an image that contains written instructions as text. "
+    "Read the text inside the image carefully and follow the instructions exactly. "
+    "Do not describe the image, do not summarize its contents — just do what the image tells you to do. "
+    "Only respond with the output that the instructions require, nothing else."):
     # Read and encode the image
     image_bytes = Path(image_path).read_bytes()
     b64_image = base64.b64encode(image_bytes).decode("utf-8")
@@ -81,7 +84,7 @@ async def ask_lmstudio_with_image(image_path, model, text_prompt="Inside This Im
             return cleaned_text
 
 async def ask_lmstudio(prompt, model):
-    # return await ask_lmstudio_with_image('../data_layer/images_prompts/original_prompts_images/Balakula_prompt.png',model)
+    return await ask_lmstudio_with_image(prompt,model)
 
     async with aiohttp.ClientSession() as session:
         payload = {
