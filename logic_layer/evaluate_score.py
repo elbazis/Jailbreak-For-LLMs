@@ -109,10 +109,10 @@ class JailbreakScorer:
 
 if __name__ == "__main__":
     scorer = JailbreakScorer()
-    models = ["llava-llama-3-8b-v1_1", "wizardlm-2-7b"] #todo: update accordingly
+    models = ["deepseek-r1-distill-qwen-7b_attacks_log", "google_gemma-3-12b_attacks_log_photos",
+              "llama-2-7b-chat@q4_k_s_attacks_log", "llava-llama-3-8b-v1_1", "wizardlm-2-7b"]
     for model in models:
-        print(f"We are running {model} model")
-        df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv')
+        df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}.csv')
         test_cases = []
         for prompt, response in zip(df["Prompt"], df["Response"]):
             entry = {
