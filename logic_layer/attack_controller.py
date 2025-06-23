@@ -75,7 +75,7 @@ async def ask_lmstudio_with_image(image_path, model, text_prompt="You are given 
             res = await resp.json()
             raw_text = res["choices"][0]["message"]["content"]
 
-            # Clean up encoding
+            # Cleanup encoding
             cleaned_text = (
                 raw_text.encode('latin1', errors='ignore')
                 .decode('utf-8', errors='ignore')
@@ -84,8 +84,6 @@ async def ask_lmstudio_with_image(image_path, model, text_prompt="You are given 
             return cleaned_text
 
 async def ask_lmstudio(prompt, model):
-    return await ask_lmstudio_with_image(prompt,model)
-
     async with aiohttp.ClientSession() as session:
         payload = {
             "model": model,

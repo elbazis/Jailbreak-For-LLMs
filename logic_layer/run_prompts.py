@@ -6,7 +6,7 @@ from attack_controller import _save_records_to_csv, run_all
 import data_layer.jailbreak_prompts_datasets.jailbreak_prompts_datasets_handler as jbph
 from attack_record import JailbreakAttackRecord
 from evaluate_score import JailbreakScorer
-
+from logic_layer.consts import MODELS, BASE_PATH
 
 
 def run_prompts(names_and_prompts, model, output_file):
@@ -36,15 +36,13 @@ def create_list_of_pairs_names_and_images_prompts(prompts_path):
 
 def main(prompts_path):
     names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(prompts_path)
-    models = ["llava-llama-3-8b-v1_1"]
-    for model in models:
+    for model in MODELS:
         model = model.replace("/", "_")
         output_file = f"../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv"
         run_prompts(names_and_prompts, model, output_file)
 
 
 if __name__ == '__main__':
-    base = '../data_layer/jailbreak_prompts_datasets'
-    for fname in os.listdir(base):
+    for fname in os.listdir(f"../{BASE_PATH}"):
         if fname.endswith('.csv'):
-            main(f"{base}/{fname}")
+            main(f"../{BASE_PATH}/{fname}")

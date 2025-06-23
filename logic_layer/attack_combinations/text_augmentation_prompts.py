@@ -2,6 +2,7 @@ import random
 import os
 import csv
 import data_layer.jailbreak_prompts_datasets.jailbreak_prompts_datasets_handler as jbph
+from logic_layer.consts import BASE_PATH, KEYBOARD_NEIGHBORS, REPLACEMENTS
 
 def to_upper(text):
     indices = random.sample(range(len(text)), k=len(text)//3)
@@ -9,63 +10,30 @@ def to_upper(text):
     for i in indices:
         text[i] = text[i].upper()
     result = ''.join(text)
-    # print("[After to_upper]:", result)
     return result
 
 def introduce_typos(text):
-    keyboard_neighbors = {
-        'a': ['q', 'w', 's', 'z'],
-        'b': ['v', 'g', 'h', 'n'],
-        'c': ['x', 'd', 'f', 'v'],
-        'd': ['s', 'e', 'r', 'f', 'c', 'x'],
-        'e': ['w', 's', 'd', 'r'],
-        'f': ['d', 'r', 't', 'g', 'v', 'c'],
-        'g': ['f', 't', 'y', 'h', 'b', 'v'],
-        'h': ['g', 'y', 'u', 'j', 'n', 'b'],
-        'i': ['u', 'j', 'k', 'o'],
-        'j': ['h', 'u', 'i', 'k', 'n', 'm'],
-        'k': ['j', 'i', 'o', 'l', 'm'],
-        'l': ['k', 'o', 'p'],
-        'm': ['n', 'j', 'k'],
-        'n': ['b', 'h', 'j', 'm'],
-        'o': ['i', 'k', 'l', 'p'],
-        'p': ['o', 'l'],
-        'q': ['a', 'w'],
-        'r': ['e', 'd', 'f', 't'],
-        's': ['a', 'w', 'e', 'd', 'x', 'z'],
-        't': ['r', 'f', 'g', 'y'],
-        'u': ['y', 'h', 'j', 'i'],
-        'v': ['c', 'f', 'g', 'b'],
-        'w': ['q', 'a', 's', 'e'],
-        'x': ['z', 's', 'd', 'c'],
-        'y': ['t', 'g', 'h', 'u'],
-        'z': ['a', 's', 'x'],
-    }
-
     text = list(text)
     for _ in range(len(text) // 3):
         idx = random.randint(0, len(text) - 1)
         char = text[idx].lower()
-        if char in keyboard_neighbors:
-            replacement = random.choice(keyboard_neighbors[char])
+        if char in KEYBOARD_NEIGHBORS:
+            replacement = random.choice(KEYBOARD_NEIGHBORS[char])
             if text[idx].isupper():
                 replacement = replacement.upper()
             text[idx] = replacement
     result = ''.join(text)
-    # print("[After introduce_typos]:", result)
     return result
 
 
 def replace_with_numbers(text):
-    replacements = {'a': '4', 'e': '3', 'i': '1', 'o': '0', 's': '5', 't': '7'}
     text = list(text)
     for _ in range(len(text) // 2):
         idx = random.randint(0, len(text) - 1)
         char = text[idx].lower()
-        if char in replacements:
-            text[idx] = replacements[char]
+        if char in REPLACEMENTS:
+            text[idx] = REPLACEMENTS[char]
     result = ''.join(text)
-    # print("[After replace_with_numbers]:", result)
     return result
 
 def shuffle_letters(text):
@@ -77,7 +45,6 @@ def shuffle_letters(text):
             chars[idx1], chars[idx2] = chars[idx2], chars[idx1]
             words[i] = ''.join(chars)
     result = ' '.join(words)
-    # print("[After shuffle_letters]:", result)
     return result
 
 def add_remove_spaces(text):
@@ -90,7 +57,6 @@ def add_remove_spaces(text):
         elif action == 'remove' and text[idx] == ' ':
             text.pop(idx)
     result = ''.join(text)
-    # print("[After add_remove_spaces]:", result)
     return result
 
 def shuffle_words(text):
@@ -99,7 +65,6 @@ def shuffle_words(text):
         idx1, idx2 = random.sample(range(len(words)), 2)
         words[idx1], words[idx2] = words[idx2], words[idx1]
     result = ' '.join(words)
-    # print("[After shuffle_words]:", result)
     return result
 
 def distort_text(text):
@@ -112,18 +77,12 @@ def distort_text(text):
         add_remove_spaces,
         shuffle_words
     ]
-    # original_tex = text
     for step in steps:
         text = step(text)
     return text
 
-# # דוגמה לשימוש
-# original_text = "Hi my name is Adi"
-# distorted = distort_text(original_text)
-# print("[Final distorted]:", distorted)
 
-names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(
-    '../../data_layer/jailbreak_prompts_datasets/first_dataset.csv')
+names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(f"../../{BASE_PATH}/first_dataset.csv")
 
 def _create_all_augmentations_for_all_prompts():
     names_and_augmentations = []
@@ -146,7 +105,7 @@ def _create_all_augmentations_for_all_prompts():
 
 def save_augmentations_to_csv():
     names_and_augmentations = _create_all_augmentations_for_all_prompts()
-    csv_file_path = f"../../data_layer/jailbreak_prompts_datasets/augmentations_prompts.csv"
+    csv_file_path = f"../../{BASE_PATH}/augmentations_prompts.csv"
     header = ["Name", "Prompt", "Augmentation Type"]
     file_exists = os.path.isfile(csv_file_path)
     with open(csv_file_path, mode='a', newline='', encoding='utf-8') as csv_file:

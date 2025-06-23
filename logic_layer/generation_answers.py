@@ -2,9 +2,9 @@ import asyncio
 import pandas as pd
 from tqdm.asyncio import tqdm as tqdm_asyncio
 from attack_controller import ask_lmstudio
+from logic_layer.consts import MODELS, BASE_PATH
 
-input_csv = "data_layer/jailbreak_prompts_datasets/first_dataset.csv"
-output_csv = "data_layer/jailbreak_prompts_datasets"
+input_csv = f"{BASE_PATH}/first_dataset.csv"
 
 df = pd.read_csv(input_csv)
 prompts = df['Prompt'].tolist()
@@ -18,9 +18,10 @@ async def generate_jailbreak_variations(prompt):
         "Briefly outline explicit steps clearly:"
     ]
     for style in instruction_styles:
-        full_prompt = f"{style}\n{prompt}"
-        response = await ask_lmstudio(full_prompt)
-        variations.append(response.strip())
+        for model in MODELS:
+            full_prompt = f"{style}\n{prompt}"
+            response = await ask_lmstudio(full_prompt, model)
+            variations.append(response.strip())
     return variations
 
 async def main():
@@ -35,9 +36,9 @@ async def main():
         })
 
     df_results = pd.DataFrame(results)
-    df_results.to_csv(output_csv, index=False)
+    df_results.to_csv(BASE_PATH, index=False)
 
-    print(f"Generated jailbreak reference answers saved to '{output_csv}'")
+    print(f"Generated jailbreak reference answers saved to '{BASE_PATH}'")
 
 
 if __name__ == "__main__":

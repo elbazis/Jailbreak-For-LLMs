@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 import data_layer.jailbreak_prompts_datasets.jailbreak_prompts_datasets_handler as jbph
+from logic_layer.consts import BASE_PATH
 
 def wrap_text_to_pixels(text, draw, font, max_width):
     lines = []
@@ -22,7 +23,7 @@ def _convert_prompt_to_image(image_path, name, prompt, width=1200, margin=40, fo
         font = ImageFont.truetype("/System/Library/Fonts/Supplemental/Arial.ttf", font_size)  # For macOS
     except:
         font = ImageFont.load_default()
-        print("⚠️ Arial not found, using default font.")
+        print("Arial not found, using default font.")
 
     dummy_img = Image.new('RGB', (width, 100))
     draw = ImageDraw.Draw(dummy_img)
@@ -52,7 +53,7 @@ def save_prompts_as_images(prompts_path, image_path):
         _convert_prompt_to_image(image_path, name, prompt)
 
 # original english prompts
-save_prompts_as_images("../../data_layer/jailbreak_prompts_datasets/first_dataset.csv",
+save_prompts_as_images(f"../../{BASE_PATH}/first_dataset.csv",
                        "../../data_layer/images_prompts/original_prompts_images")
 
 # באסקית
