@@ -109,7 +109,7 @@ class JailbreakScorer:
 
 if __name__ == "__main__":
     scorer = JailbreakScorer()
-    models = ["google_gemma-3-12b"] #todo: update accordingly
+    models = ["llava-llama-3-8b-v1_1", "wizardlm-2-7b"] #todo: update accordingly
     for model in models:
         print(f"We are running {model} model")
         df = pd.read_csv(f'../data_layer/jailbreak_attacks_log/{model}_attacks_log.csv')
