@@ -3,6 +3,7 @@ MODELS = ["deepseek-r1-distill-qwen-7b", "google/gemma-3-12b", "gemma-3-4b-it",
           "llama-2-7b-chat@q4_k_s", "llava-llama-3-8b-v1_1", "wizardlm-2-7b"]
 
 BASE_PATH = "data_layer/jailbreak_prompts_datasets"
+PHOTO_PATH = "../../data_layer/images_prompts"
 
 KEYBOARD_NEIGHBORS = {
     'a': ['q', 'w', 's', 'z'],
@@ -33,3 +34,6 @@ KEYBOARD_NEIGHBORS = {
     'z': ['a', 's', 'x'],
 }
 REPLACEMENTS = {'a': '4', 'e': '3', 'i': '1', 'o': '0', 's': '5', 't': '7'}
+
+ALPHA = 0.3
+BETA  = 0.7

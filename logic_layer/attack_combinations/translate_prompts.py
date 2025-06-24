@@ -6,9 +6,9 @@ import csv
 import data_layer.jailbreak_prompts_datasets.jailbreak_prompts_datasets_handler as jbph
 from logic_layer.consts import BASE_PATH
 
-names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(f"../../{BASE_PATH}/first_dataset.csv")
 
 def _translate_prompts(lang):
+    names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(f"../../{BASE_PATH}/first_dataset.csv")
     names_and_translated_prompts = []
     translator = Translator()
     for name, prompt in names_and_prompts:

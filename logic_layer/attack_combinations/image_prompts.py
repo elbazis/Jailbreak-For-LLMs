@@ -1,7 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 import data_layer.jailbreak_prompts_datasets.jailbreak_prompts_datasets_handler as jbph
-from logic_layer.consts import BASE_PATH
+from logic_layer.consts import BASE_PATH, PHOTO_PATH
+
 
 def wrap_text_to_pixels(text, draw, font, max_width):
     lines = []
@@ -54,16 +55,16 @@ def save_prompts_as_images(prompts_path, image_path):
 
 # original english prompts
 save_prompts_as_images(f"../../{BASE_PATH}/first_dataset.csv",
-                       "../../data_layer/images_prompts/original_prompts_images")
+                       f"{PHOTO_PATH}/original_prompts_images")
 
 # באסקית
 save_prompts_as_images("../../data_layer/translated_jailbreak_prompts/eu_prompts.csv",
-                       "../../data_layer/images_prompts/eu_prompts_images")
+                       f"{PHOTO_PATH}/eu_prompts_images")
 
 # וולשית
 save_prompts_as_images("../../data_layer/translated_jailbreak_prompts/cy_prompts.csv",
-                       "../../data_layer/images_prompts/cy_prompts_images")
+                       f"{PHOTO_PATH}/cy_prompts_images")
 
 # אסטונית
 save_prompts_as_images("../../data_layer/translated_jailbreak_prompts/et_prompts.csv",
-                       "../../data_layer/images_prompts/et_prompts_images")
+                       f"{PHOTO_PATH}/et_prompts_images")

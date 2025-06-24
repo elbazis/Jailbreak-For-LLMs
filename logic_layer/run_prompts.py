@@ -22,7 +22,6 @@ def run_prompts(names_and_prompts, model, output_file):
         _save_records_to_csv(records, output_file)
 
 
-
 def create_list_of_pairs_names_and_images_prompts(prompts_path):
     names_and_prompts_images = []
 

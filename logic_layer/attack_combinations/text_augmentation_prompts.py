@@ -82,9 +82,8 @@ def distort_text(text):
     return text
 
 
-names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(f"../../{BASE_PATH}/first_dataset.csv")
-
 def _create_all_augmentations_for_all_prompts():
+    names_and_prompts = jbph.create_list_of_pairs_names_and_prompts_from_csv(f"../../{BASE_PATH}/first_dataset.csv")
     names_and_augmentations = []
     for name, original_prompt in names_and_prompts:
         steps = [

@@ -5,7 +5,6 @@ from attack_controller import ask_lmstudio
 from logic_layer.consts import MODELS, BASE_PATH
 
 input_csv = f"{BASE_PATH}/first_dataset.csv"
-
 df = pd.read_csv(input_csv)
 prompts = df['Prompt'].tolist()
 
